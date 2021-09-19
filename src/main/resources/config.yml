@@ -1,0 +1,17 @@
+customs:
+  0:
+    id: 1
+    meta: 0
+    chance: 10
+    name: "test name"
+    lore: 
+      - "123"
+      - "123"
+  1:
+    id: 1
+    meta: 0
+    chance: 10
+    name: "test name 2"
+    lore: 
+      - "123"
+      - "123"
