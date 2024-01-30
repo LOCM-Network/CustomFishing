@@ -50,7 +50,7 @@ public class CustomFishingAPI {
         Random random = new Random();
         int kg = random.nextInt(10);
         if(isFish(reward)){
-            kg += kg + random.nextInt((level * random.nextInt(10)) + random.nextInt(level));
+            kg += random.nextInt((level * random.nextInt(10)) + random.nextInt(level));
         }
         return kg;
     }
