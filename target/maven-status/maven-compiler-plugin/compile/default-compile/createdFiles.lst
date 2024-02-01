@@ -1,0 +1,8 @@
+me\phuongaz\fishing\FishShopCommand.class
+me\phuongaz\fishing\session\PlayerSession.class
+me\phuongaz\fishing\Loader.class
+me\phuongaz\fishing\utils\Utils.class
+me\phuongaz\fishing\api\CustomFishingAPI.class
+me\phuongaz\fishing\form\FormStorage.class
+me\phuongaz\fishing\EventListener.class
+me\phuongaz\fishing\utils\Utils$1.class

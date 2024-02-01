@@ -8,6 +8,7 @@ import cn.nukkit.Server;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
+import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.player.PlayerFishEvent;
 import cn.nukkit.event.player.PlayerInteractEvent;
 import cn.nukkit.event.player.PlayerLocallyInitializedEvent;
@@ -65,6 +66,17 @@ public class EventListener implements Listener{
         event.setLoot(reward);
         CustomFishingAPI.addPlayerAmount(player, 1);
         player.sendActionBar(TextFormat.colorize("&f&lBạn vừa câu được:&e " + reward.getCustomName() + " &8|&f Cân nặng &e" + kg + " &fkg"));
+    }
+
+    public void onDamage(EntityDamageEvent event){
+        if(event.getEntity() instanceof Player){
+            Player player = (Player) event.getEntity();
+            if(event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE){
+                if(player.getInventory().getItemInHand().getId() == ItemID.FISHING_ROD){
+                    event.setCancelled();
+                }
+            }
+        }
     }
 
     @EventHandler

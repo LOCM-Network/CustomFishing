@@ -1,0 +1,22 @@
+date: 1 #Đừng động đến
+price: 1000 #Số xu / 1 lượt mua
+default: 25 #Số lượt trên 1 ngày
+customs:
+  0:
+    id: 1
+    meta: 0
+    chance: 10
+    name: "test name"
+    lore: 
+      - "123"
+      - "123"
+    enchants:
+      "1:10" #id:level
+  1:
+    id: 1
+    meta: 0
+    chance: 10
+    name: "test name 2"
+    lore: 
+      - "123"
+      - "123"
