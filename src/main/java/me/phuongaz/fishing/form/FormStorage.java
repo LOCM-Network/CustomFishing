@@ -6,10 +6,8 @@ import cn.nukkit.item.ItemID;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
 import me.onebone.economyapi.EconomyAPI;
-import me.phuongaz.fishing.Loader;
 import me.phuongaz.fishing.api.CustomFishingAPI;
 import ru.contentforge.formconstructor.form.CustomForm;
-import ru.contentforge.formconstructor.form.ModalForm;
 import ru.contentforge.formconstructor.form.SimpleForm;
 import ru.contentforge.formconstructor.form.element.Input;
 import ru.contentforge.formconstructor.form.element.Label;
@@ -33,7 +31,14 @@ public class FormStorage {
     }
 
     public static void sendSlotShop(Player player){
-        int price = Loader.getInstance().getConfig().getInt("price");
+        int max = CustomFishingAPI.getMax(player);
+
+        if(max >= 50){
+            player.sendMessage(TextFormat.colorize("&l&fBạn đã đạt tối đa lượt câu trong ngày"));
+            return;
+        }
+
+        int price = 5000;
         CustomForm form = new CustomForm(TextFormat.colorize("&l&eCửa hàng câu cá"));
         form.addElement(TextFormat.colorize("&l&fGiá: &e" + price +" &7/&e 1&f lượt"));
         form.addElement("soluong", new Input(TextFormat.colorize("&l&fSố lượng cần mua:")));
@@ -43,6 +48,14 @@ public class FormStorage {
             if(mua){
                 try{
                     int amount = Integer.parseInt(response.getInput("soluong").getValue());
+                    if(amount < 0 ) {
+                        p.sendMessage(TextFormat.colorize("&l&fSố lượng không hợp lệ"));
+                        return;
+                    }
+                    if(max + amount > 30){
+                        p.sendMessage(TextFormat.colorize("&l&fSố lượng lớn hơn số lượt còn lại trong ngày"));
+                        return;
+                    }
                     if(EconomyAPI.getInstance().myMoney(p) >= price * amount){
                         EconomyAPI.getInstance().reduceMoney(p, price * amount);
                         p.sendMessage(TextFormat.colorize("&l&fMua thành công &e" + amount + "&f lượt câu trong hôm nay"));
@@ -62,7 +75,7 @@ public class FormStorage {
         CustomForm form = new CustomForm(TextFormat.colorize("&l&eCỬA HÀNG HẢI SẢN"));
         Item item = player.getInventory().getItemInHand();
         int kg = CustomFishingAPI.getKg(item);
-        int price = kg * 100;
+        int price = kg * 105;
         String content = "";
         if(kg == 0){
             if(item.getId() == 0){
@@ -106,16 +119,16 @@ public class FormStorage {
         if(item.getId() == ItemID.FISHING_ROD){
             if(item.hasCompoundTag() && item.getNamedTag().contains("FishLevel")){
                 int current = item.getNamedTag().getInt("FishLevel");
-                price *= current;
-                if(current >= 301){
+                price = (current * 2300) * 2;
+                if(current >= 120){
                     content = "&l&eĐã đạt cấp độ tối đa";
                 }else{
                     next_level += current;
+                    content = "&l&fBạn có muốn nâng cấp cần câu lên cấp độ &e" + next_level + "\n" +
+                            "&fGiá nâng cấp: &e" + price + "&f xu\n" +
+                            "&fCần câu có cấp độ càng cao càng câu được cá to!";
                 }
             }
-            content = "&l&fBạn có muốn nâng cấp cần câu lên cấp độ &e" + next_level + "\n" +
-                    "&fGiá nâng cấp: &e" + price + "&f xu\n" +
-                    "&fCần câu có cấp độ càng cao càng câu được cá to!";
         }else{
             content = "&l&eChỉ có thể nâng cấp cần câu!";
         }
@@ -124,7 +137,7 @@ public class FormStorage {
         int finalPrice = price;
         int finalNext_level = next_level;
         form.setHandler((p, response) -> {
-            if(response.getToggle("cancan").getValue() && finalNext_level < 301 && item.getId() == ItemID.FISHING_ROD){
+            if(response.getToggle("cancan").getValue() && finalNext_level < 200 && item.getId() == ItemID.FISHING_ROD){
                 EconomyAPI ecoapi = EconomyAPI.getInstance();
                 if(ecoapi.myMoney(p) >= finalPrice){
                     CompoundTag nbt = new CompoundTag();

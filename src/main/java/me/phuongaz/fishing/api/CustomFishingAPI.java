@@ -1,8 +1,11 @@
 package me.phuongaz.fishing.api;
 
 import cn.nukkit.Player;
+import cn.nukkit.block.BlockID;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemID;
+import cn.nukkit.item.enchantment.Enchantment;
+import cn.nukkit.item.food.Food;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.utils.TextFormat;
 import me.phuongaz.fishing.Loader;
@@ -50,7 +53,8 @@ public class CustomFishingAPI {
         Random random = new Random();
         int kg = random.nextInt(10);
         if(isFish(reward)){
-            kg += random.nextInt((level * random.nextInt(10)) + random.nextInt(level));
+            System.out.println("\nis fish\n");
+            kg += random.nextInt(level) * random.nextInt(3);
         }
         return kg;
     }
@@ -58,6 +62,7 @@ public class CustomFishingAPI {
     public static int getKg(Item item){
         int kg = 0;
         if(item.hasCompoundTag() && item.getNamedTag().exist("kg")){
+            System.out.println(item.getNamedTag().getInt("kg"));
            kg += item.getNamedTag().getInt("kg");
         }
         return kg;
@@ -86,6 +91,52 @@ public class CustomFishingAPI {
         rewards.put(Item.get(ItemID.PUFFERFISH), "&l&eCá nóc");
         rewards.put(Item.get(ItemID.ARROW), "&l&fCung tên rỉ sắt");
         rewards.put(Item.get(ItemID.DIAMOND), "&bKiêm Cương");
+        rewards.put(Item.get(ItemID.GOLD_INGOT), "&eVàng");
+        rewards.put(Item.get(ItemID.IRON_INGOT), "&fSắt");
+        rewards.put(Item.get(ItemID.EMERALD), "&aNgọc Lục Bảo");
+        rewards.put(Item.get(ItemID.COAL), "&8Than");
+        rewards.put(Item.get(ItemID.REDSTONE), "&cĐá Đỏ");
+        rewards.put(Item.get(ItemID.STICK), "&fCây gậy");
+        rewards.put(Item.get(ItemID.STRING), "&fSợi dây");
+        rewards.put(Item.get(ItemID.BONE), "&fXương");
+        rewards.put(Item.get(ItemID.ROTTEN_FLESH), "&fThịt thối");
+        rewards.put(Item.get(ItemID.LEATHER), "&fDa");
+        rewards.put(Item.get(ItemID.FEATHER), "&fLông vũ");
+        rewards.put(Item.get(ItemID.SLIMEBALL), "&aBóng dính");
+        rewards.put(Item.get(ItemID.GUNPOWDER), "&fBột súng");
+        rewards.put(Item.get(BlockID.GOLD_BLOCK), "&eKhối Vàng");
+        rewards.put(Item.get(BlockID.IRON_BLOCK), "&fKhối Sắt");
+        rewards.put(Item.get(BlockID.DIAMOND_ORE), "&bMỏ Kim Cương");
+        rewards.put(Item.get(BlockID.EMERALD_ORE), "&aMỏ Ngọc Lục Bảo");
+        rewards.put(Item.get(BlockID.REDSTONE_ORE), "&cMỏ Đá Đỏ");
+        rewards.put(Item.get(BlockID.COAL_ORE), "&8Mỏ Than");
+        rewards.put(Item.get(BlockID.LAPIS_ORE), "&9Mỏ Lapis");
+
+        Enchantment[] enchantments = {
+                Enchantment.getEnchantment(Enchantment.ID_PROTECTION_ALL),
+                Enchantment.getEnchantment(Enchantment.ID_PROTECTION_FIRE),
+                Enchantment.getEnchantment(Enchantment.ID_EFFICIENCY)
+        };
+        for (Enchantment enchantment : enchantments) {
+            int level = new Random().nextInt(2);
+            Item item = Item.get(ItemID.BOOK);
+            item.setCustomName(TextFormat.colorize("&l&fSách Phép: &e" + enchantment.getName() + " " + level));
+            item.addEnchantment(enchantment.setLevel(level));
+            rewards.put(item, "&l&fSách Phép: &e" + enchantment.getName() + " " + level);
+        }
+
+        //seeds
+        Item[] seeds = {
+                Item.get(ItemID.WHEAT_SEEDS),
+                Item.get(ItemID.PUMPKIN_SEEDS),
+                Item.get(ItemID.MELON_SEEDS),
+                Item.get(ItemID.BEETROOT_SEEDS)
+        };
+
+        for (Item seed : seeds) {
+            rewards.put(seed, "&l&fHạt giống: &e" + seed.getName());
+        }
+
         return rewards;
     }
 
